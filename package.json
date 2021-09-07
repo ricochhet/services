@@ -1,0 +1,36 @@
+{
+    "name": "@ricochhet/services",
+    "version": "1.0.0",
+    "description": "HTTP Microservices",
+    "main": "src/index.js",
+    "scripts": {
+        "prettier": "npx prettier --write .",
+        "prettier:check": "npx prettier --check .",
+        "test": "node test/index.js",
+        "hooks": "npm install --save-dev husky lint-staged && npx husky install && npx husky add .husky/pre-commit \"npx lint-staged\"",
+        "husky:install": "husky install",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    },
+    "keywords": [],
+    "author": "ricochhet",
+    "license": "MIT",
+    "directories": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ricochhet/services.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ricochhet/services/issues"
+    },
+    "homepage": "https://github.com/ricochhet/services",
+    "devDependencies": {
+        "husky": "^7.0.2",
+        "lint-staged": "^11.1.2",
+        "prettier": "^2.3.2"
+    }
+}
