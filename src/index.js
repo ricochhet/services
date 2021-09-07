@@ -2,16 +2,6 @@ const fs = require('fs')
 const service = require('./service')
 const app = service.service(require('http'))
 
-service.cmd(process.argv.slice(2), 'createCredentials', (args) => {
-    if (args.length) {
-        const name = service.SHA256(args[0])
-        const pass = service.SHA256(args[1])
-        console.log(name, pass)
-    }
-
-    return
-})
-
 app.post('/auth', (req, res) => {
     service.basicAuth(
         req,
