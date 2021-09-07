@@ -8,9 +8,9 @@ app.post('/auth', (req, res) => {
         res,
         service.basicAuthHandler,
         () => {
-            res.send('Success!', 401)
+            res.send('Success!', 200)
         },
-        JSON.parse(fs.readFileSync('./src/table.json').toString())
+        JSON.parse(fs.readFileSync('./userHashTable.json').toString())
     )
 })
 

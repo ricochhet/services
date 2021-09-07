@@ -271,16 +271,23 @@ const basicAuth = (
     }
 }
 
-const basicAuthHandler = (a, b, basicAuthHandlerTable) => {
+const basicAuthHandler = (user, pass, basicAuthHandlerTable) => {
     if (basicAuthHandlerTable) {
-        a = SHA256(a)
-        b = SHA256(b)
+        user = SHA256(user)
+        pass = SHA256(pass)
 
         for (const i in basicAuthHandlerTable) {
-            const aa = timeSafeCompare(a, basicAuthHandlerTable[i]['a'])
-            const bb = timeSafeCompare(b, basicAuthHandlerTable[i]['b'])
+            const compareUser = timeSafeCompare(
+                user,
+                basicAuthHandlerTable[i]['user']
+            )
 
-            if (aa && bb) {
+            const comparePass = timeSafeCompare(
+                pass,
+                basicAuthHandlerTable[i]['pass']
+            )
+
+            if (compareUser && comparePass) {
                 return true
             }
         }
