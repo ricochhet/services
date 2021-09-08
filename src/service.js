@@ -2,7 +2,9 @@ const CREDENTIALS_REGEXP = new RegExp(
     '^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) *$'
 )
 const USER_PASS_REGEXP = new RegExp('^([^:]*):(.*)$')
+const processCluster = require('cluster')
 const crypto = require('crypto')
+const { cpus } = require('os')
 const fs = require('fs')
 
 const SHA256 = (str) => {
@@ -298,9 +300,41 @@ const basicAuthHandler = (user, pass, basicAuthHandlerTable) => {
     }
 }
 
+const cluster = (handler, callback) => {
+    const numCPUs = cpus().length
+
+    if (processCluster.isPrimary) {
+        console.log(`Primary ${process.pid} is running`)
+
+        for (let i = 0; i < numCPUs; i++) {
+            processCluster.fork()
+        }
+
+        processCluster.on('exit', (worker, code, signal) => {
+            if (signal) {
+                console.log(
+                    `Worker ${worker.process.pid} was killed by signal: ${signal}`
+                )
+            } else if (code !== 0) {
+                console.log(
+                    `Worker ${worker.process.pid} exited with error code: ${code}`
+                )
+            } else {
+                console.log(`Worker ${worker.process.pid} success`)
+            }
+        })
+
+        callback(process.pid, process)
+    } else {
+        handler(process.pid, process)
+        console.log(`Worker ${process.pid} started`)
+    }
+}
+
 module.exports = {
     cmd,
     SHA256,
+    cluster,
     service,
     basicAuth,
     basicAuthHandler,
