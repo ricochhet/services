@@ -13,8 +13,7 @@ cluster(
                 res,
                 basicAuth.handler,
                 () => {
-                    res.send('Success!', 200)
-                    console.log(`/auth: success - 200`)
+                    res.out('Success!', 200).send(req.url)
                 },
                 JSON.parse(fs.readFileSync('./userHashTable.json').toString())
             )

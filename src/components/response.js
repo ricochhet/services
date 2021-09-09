@@ -1,8 +1,25 @@
 const createResponse = (res) => {
-    res._write = (message) => res.end(message)
-    res.send = (message, statusCode) => {
-        res.statusCode = statusCode
-        res.end(message)
+    res.out = (message, statusCode) => {
+        return {
+            _write: () => {
+                res.end(message)
+            },
+            _send: () => {
+                res.statusCode = statusCode
+                res.end(message)
+            },
+            send: (url, outlog = false) => {
+                res.statusCode = statusCode
+
+                if (outlog) {
+                    res.end(`${url}: ${message} - ${statusCode}`)
+                } else {
+                    res.end(message)
+                }
+
+                console.log(`${url}: ${message} - ${statusCode}`)
+            },
+        }
     }
 
     res.json = (message) => {
