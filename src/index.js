@@ -1,15 +1,17 @@
 const fs = require('fs')
 const service = require('./service')
+const cluster = require('./utils/cluster')
+const basicAuth = require('./auth/basicAuth')
 
-service.cluster(
+cluster(
     () => {
-        const app = service.service(require('http'))
+        const app = service(require('http'))
 
         app.post('/auth', (req, res) => {
-            service.basicAuth(
+            basicAuth.create(
                 req,
                 res,
-                service.basicAuthHandler,
+                basicAuth.handler,
                 () => {
                     res.send('Success!', 200)
                     console.log(`/auth: success - 200`)
@@ -18,7 +20,7 @@ service.cluster(
             )
         })
 
-        app.listen(8080) /*.message('Listening on port: 8080')*/
+        app.listen(8080)
     },
     () => {
         console.log('Listening on port: 8080')
