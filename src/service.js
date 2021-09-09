@@ -53,6 +53,7 @@ const service = (protocol) => {
         if (!routeTable[path]) {
             routeTable[path] = {}
         }
+
         routeTable[path] = {
             ...routeTable[path],
             [method]: cb,
