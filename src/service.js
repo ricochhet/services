@@ -5,7 +5,6 @@ const USER_PASS_REGEXP = new RegExp('^([^:]*):(.*)$')
 const clust = require('cluster')
 const crypto = require('crypto')
 const { cpus } = require('os')
-const fs = require('fs')
 
 const SHA256 = (str) => {
     return crypto.createHash('sha256').update(str).digest('hex')
